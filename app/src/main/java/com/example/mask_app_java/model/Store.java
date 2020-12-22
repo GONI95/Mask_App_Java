@@ -73,7 +73,13 @@ public class Store {
     }
 
     public String getRemainStat() {
-        return remainStat;
+        /*
+        if (remainStat == null) {
+             return "null";
+        }
+         */
+
+            return remainStat;
     }
 
     public void setRemainStat(String remainStat) {

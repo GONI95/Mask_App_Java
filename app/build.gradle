@@ -23,6 +23,8 @@ android {
         }
     }
     compileOptions {
+        // gradle 플러그인 : 자바 8의 기능을 사용할 수 있음(stream API )
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -42,4 +44,6 @@ dependencies {
     // 레트로핏
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
+    // stream API
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 }

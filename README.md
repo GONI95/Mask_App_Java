@@ -144,7 +144,7 @@ public interface MaskService {
   <b>1. MainViewModel 클래스를 생성합니다.  </b>
   
   <b>2. MutableLiveData 객체 생성과 getter, setter 구현 </b>
-  <code> 
+        <code> 
         private MutableLiveData<List<Store>> itemLiveData = new MutableLiveData<>();  // null 값으로 초기화
           public MutableLiveData<List<Store>> getItemLiveData() {
           return itemLiveData;
@@ -152,7 +152,7 @@ public interface MaskService {
         public void setItemLiveData(MutableLiveData<List<Store>> itemLiveData) {
          this.itemLiveData = itemLiveData;
         }
-  </code>
+        </code>
          
    <b>3. MainViewModel 객체 생성 : MainActivity </b>
    <code> 

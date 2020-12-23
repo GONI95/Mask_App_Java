@@ -193,10 +193,11 @@ public interface MaskService {
         LiveData를 사용하니 그런 작업 필요없이 Activity에서 데이터를 관찰하다 변경점을 캐치하여 데이터를 변경해주면 됩니다. 단 문제가 하나 발생하게 되는데
         화면 전환 시 Call은 한 번만 사용할 수 있는데, 요청에 대한 Call 객체가 이미 있다며 앱이 꺼지는 문제가 발생합니다.
         해당 문제는 아래 링크를 통해 해결할 수 있습니다.
-</pre>
-        [Already executed](https://stackoverflow.com/questions/35093884/retrofit-illegalstateexception-already-executed) 
+  </pre>
         
-<pre>     
+        [Already_executed](https://stackoverflow.com/questions/35093884/retrofit-illegalstateexception-already-executed/) 
+        
+  <pre>     
         <code>
         public void fetchStoreInfor() {
         // 안드로이드에선 네트워크 처리를 할 때 비동기로 작업하도록 강제가 되어있음

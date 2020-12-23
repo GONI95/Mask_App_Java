@@ -141,6 +141,7 @@ public interface MaskService {
 </pre>
 
 ### 8. ViewModel
+<pre>
   <b>1. MainViewModel 클래스를 생성합니다.  </b>
   
   <b>2. MutableLiveData 객체 생성과 getter, setter 구현 </b>

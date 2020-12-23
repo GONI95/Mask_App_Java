@@ -187,17 +187,13 @@ public interface MaskService {
   </pre>      
   
   <b>4. 실질적인 데이터를 받아오는 코드를 정의할 fetchStoreInfor를 정의 </b>
+        [Already executed](https://stackoverflow.com/questions/35093884/retrofit-illegalstateexception-already-executed/) 
   <pre>
         안드로이드에선 네트워크 처리를 할 때 비동기로 작업하도록 강제되어 있습니다. execute()는 동기 방식이며, 비동기 방식인 enqueue()를 사용합니다.
         fetchStoreInfor()를 외부에서 호출하게되면 처리한 후 다시 호출한 곳으로 돌려줘야합니다. 그렇게 되면 Interface를 가지고 또 Callback 구현해야합니다.
-        LiveData를 사용하니 그런 작업 필요없이 Activity에서 데이터를 관찰하다 변경점을 캐치하여 데이터를 변경해주면 됩니다. 단 문제가 하나 발생하게 되는데
+        LiveData를 사용하니 그런 작업 필요없이 Activity에서 데이터를 관찰하다 변경점을 캐치하여 데이터를 변경해주면 됩니다. 단 문제가 하나 발생하게 되는데,
         화면 전환 시 Call은 한 번만 사용할 수 있는데, 요청에 대한 Call 객체가 이미 있다며 앱이 꺼지는 문제가 발생합니다.
-        해당 문제는 아래 링크를 통해 해결할 수 있습니다.
-  </pre>
-        
-        [Already_executed](https://stackoverflow.com/questions/35093884/retrofit-illegalstateexception-already-executed/) 
-        
-  <pre>     
+        해당 문제는 위 링크를 통해 해결할 수 있습니다.    
         <code>
         public void fetchStoreInfor() {
         // 안드로이드에선 네트워크 처리를 할 때 비동기로 작업하도록 강제가 되어있음
@@ -228,8 +224,11 @@ public interface MaskService {
         } 
 
         </code>   
-         
+   </pre>     
+   
    <b>5. MainViewModel 객체 생성 : MainActivity </b>
+   
+   <pre>
    <code> 
          private MainViewModel viewModel;
             ...
@@ -237,9 +236,11 @@ public interface MaskService {
            viewModel = new ViewModelProvider(this).get(MainViewModel.class);
          }
    </code>
+   </pre>
         
    <b>6. LiveData 읽어오기위한 Observe </b>
    
+   <pre>
    <code>
         // UI 변경을 감지하여 업데이트
         viewModel.getItemLiveData().observe(this, stores -> {
@@ -250,8 +251,11 @@ public interface MaskService {
   
         viewModel.fetchStoreInfor();
    </code>
+   </pre>
    
    <b>7. 리팩토링 (6에서 정의한 MainActivity Lifecycle 로 인해 화면전환 시 viewModel.fetchStoreInfor();가 실행되면서 새로 요청하고 데이터를 다시 쓰는 문제점) </b>
+   
+   <pre>
          화면전환 시 MainActivity Lifecycle이 새로 돌면서 viewModel.fetchStoreInfor(); 코드로 인해 fetchStoreInfor()를 다시 호출하고 데이터를 화면에 띄우게 됩니다. 
          MainViewModel에서 생성자를 통해 fetchStoreInfor()를 실행되도록 변경하여 화면 전환 시 발생하는 위의 문제를 해결할 수 있습니다.
          
@@ -263,4 +267,4 @@ public interface MaskService {
            fetchStoreInfor();
          }
          </code>
-</pre>
+  </pre>

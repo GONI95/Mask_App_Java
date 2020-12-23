@@ -47,19 +47,19 @@
 ### 4. Json 형식의 데이터를 Java 객체(Model)로 변환해주는 사이트
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  [Jsonschema2pojo](http://www.jsonschema2pojo.org/)
 <pre>
-  <b>1. 해당 사이트에 응답 시 필요로 하는 json 데이터 형식을 입력합니다.</b>
-  <b>2. Target language : java</b>
-  <b>3. Source type : JSON</b>
-  <b>4. Annotation style : Moshi</b>
+  ><b>1. 해당 사이트에 응답 시 필요로 하는 json 데이터 형식을 입력합니다.</b>
+  ><b>2. Target language : java</b>
+  ><b>3. Source type : JSON</b>
+  ><b>4. Annotation style : Moshi</b>
         Moshi를 사용하므로 Moshi 선택
-  <b>5. Use primitive types (Check)</b>
+  ><b>5. Use primitive types (Check)</b>
         체크하지 않으면 래퍼 클래스를 사용하게 됩니다.
         primitive type(기본 자료형)
         wrapper class(기본 자료형을 객체로 다루는 클래스)
-  <b>6. Use double numbers (Check)</b>
+  ><b>6. Use double numbers (Check)</b>
         위도, 경도가 있으니 double이 체크되어야 합니다.
-  <b>7. Include getters and setters (Check)</b>
-  <b>8. Zip 버튼을 클릭해서 프로젝트 패키지로 복붙</b>
+  ><b>7. Include getters and setters (Check)</b>
+  ><b>8. Zip 버튼을 클릭해서 프로젝트 패키지로 복붙</b>
 </pre>
 
 
@@ -84,7 +84,7 @@ public interface MaskService {
 ### 6. ViewModel, RecyclerView를 사용하기 전 응답이 제대로 도착하는지 Test
 
 <pre>
-  <b>1. com 패키지를 사용하여 Test </b>
+  ><b>1. com 패키지를 사용하여 Test </b>
         com 패키지는 2가지 있는데, 일반적인 로직을 Test 할 수 있는 com (test) 패키지에서 Test를 합니다.
         com (androidTest) 패키지에선 안드로이드에서만 구현되는, 즉 안드로이드에 의존성을 지닌 UI 등을 Test하는 패키지 입니다.
   <b>2. Test Code </b>

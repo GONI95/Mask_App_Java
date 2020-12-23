@@ -2,7 +2,7 @@
 
 ### 1. Retrofit과 Moshi를 이용해 서버에 저장된 sample.json에 요청, 응답을 받아 Mask 재고를 Recycler View로 출력시켜주는 마스크 재고 앱
 
-### 2. Retrofit과 Moshi 라이브러리 추가
+### 2. 라이브러리 추가(Module 수준의 Gradle)
 * Retrofit
 <pre>
   implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -12,6 +12,28 @@
 <pre>
   implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
 </pre>
+
+* ViewModel
+<pre>
+  def lifecycle_version = "2.2.0"
+  implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+</pre>
+
+* LiveData
+<pre>
+  implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+</pre>
+
+* Stream API
+<pre>
+   coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
+
+   compileOptions {
+        // 자바 8의 기능을 사용할 수 있습니다.
+        coreLibraryDesugaringEnabled true
+    }
+</pre>
+
 
 
 ### 3. Retrofit 사용을 위한 가이드 

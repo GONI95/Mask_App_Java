@@ -134,7 +134,9 @@ public interface MaskService {
             recyclerView.setAdapter(adapter);
   </code>
   <b>5. Adapter 클래스로 ArrayList 정보를 전달합니다 : MainViewModel </b>
-        전형적인 코드와 다른 부분이라면 ArrayList의 값이 변경되는 경우 Adapter 객체를 통해 ArrayList 전달하는 것이 비효율적이기 때문에 UpdateItems() 메서드로 ArrayList 만 넘겨서 동적으로 데이터를 변경합니다.
+        전형적인 코드와 다른 부분이라면 ArrayList의 값이 변경되는 경우 Adapter 객체를 통해 ArrayList 전달하는 것이 비효율적이기 때문에 
+        UpdateItems() 메서드로 ArrayList 만 넘겨서 동적으로 데이터를 변경합니다.
+        
         <code>
         public void UpdateItems(List<Store> items){
           mItems = items;
@@ -199,12 +201,14 @@ public interface MaskService {
         LiveData를 사용하니 그런 작업 필요없이 Activity에서 데이터를 관찰하다 변경점을 캐치하여 데이터를 변경해주면 됩니다. 단 문제가 하나 발생하게 되는데,
         화면 전환 시 Call은 한 번만 사용할 수 있는데, 요청에 대한 Call 객체가 이미 있다며 앱이 꺼지는 문제가 발생합니다.
         해당 문제는 위 링크를 통해 해결할 수 있습니다.    
+        
         <code>
         public void fetchStoreInfor() {
-        // 안드로이드에선 네트워크 처리를 할 때 비동기로 작업하도록 강제가 되어있음
+   
         storeInforCall.clone().enqueue(new Callback<StoreInfor>() {
             // 각각의 요청에 대해 사용 중인 Call 객체가 있는지 확인한다. 즉 객체를 복사해서 사용하는 것
-            // Retrofit을 만든 Jake Wharton이 직접 이렇게 해야한다고 stackoverflow에 댓글로 달았음음            @Override
+                
+            @Override
             public void onResponse(Call<StoreInfor> call, Response<StoreInfor> response) {
                 // 요청 성공
                 Log.d(TAG, "REFRESH");

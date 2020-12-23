@@ -126,9 +126,13 @@ public interface MaskService {
 
 
   <b>1. RecyclerView에서 사용할 Item Layout을 생성합니다. </b>
+  
   <b>2. RecyclerView를 띄우려는 xml에 RecyclerView를 추가합니다. </b>
+  
   <b>3. RecyclerView Adapter 클래스를 생성하고 ViewHolder 클래스를 생성하여 코드를 작성합니다.(대부분 전형적인 코드로 기준이 잡혀있습니다.)</b>
+  
   <b>4. RecyclerView를 Adapter와 연결시켜 줍니다.  </b>
+  
   <pre>
   ______________________________________________________________________________________________________________________
   <code>

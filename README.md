@@ -39,7 +39,7 @@
 ### 3. Retrofit 사용을 위한 가이드 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  [Retrofit](https://square.github.io/retrofit/)
 
-#### 4. Json 형식의 데이터를 Java 객체(Model)로 변환해주는 사이트
+### 4. Json 형식의 데이터를 Java 객체(Model)로 변환해주는 사이트
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  [Jsonschema2pojo](http://www.jsonschema2pojo.org/)
 <pre>
   <b>1. 해당 사이트에 응답 시 필요로 하는 json 데이터 형식을 입력합니다.</b>
@@ -59,7 +59,7 @@
 
 
   
-#### 5. Retrofit은 HTTP API를 JAVA Interface로 전환이 가능합니다. Service를 작성
+### 5. Retrofit은 HTTP API를 JAVA Interface로 전환이 가능합니다. Service를 작성
 
 ><b>1. StoreInfor는 목차. 4에 의해 생성된 Model </b>
 <pre>
@@ -76,7 +76,7 @@ public interface MaskService {
 </code>
 </pre>
 
-#### 6. ViewModel, RecyclerView를 사용하기 전 응답이 제대로 도착하는지 Test
+### 6. ViewModel, RecyclerView를 사용하기 전 응답이 제대로 도착하는지 Test
 <pre>
   <b>1. com 패키지를 사용하여 Test </b>
         com 패키지는 2가지 있는데, 일반적인 로직을 Test 할 수 있는 com (test) 패키지에서 Test를 합니다.
@@ -107,7 +107,7 @@ public interface MaskService {
   </code>
 </pre>
 
-#### 6. RecyclerView
+### 7. RecyclerView
 <pre>
   <b>1. RecyclerView에서 사용할 Item Layout을 생성합니다. </b>
   <b>2. RecyclerView를 띄우려는 xml에 RecyclerView를 추가합니다. </b>
@@ -138,7 +138,7 @@ public interface MaskService {
          </code>
 </pre>
 
-#### 6. ViewModel
+### 8. ViewModel
 
 
 

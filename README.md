@@ -2,7 +2,7 @@
 
 ### 1. Retrofit과 Moshi를 이용해 서버에 저장된 sample.json에 요청, 응답을 받아 Mask 재고를 Recycler View로 출력시켜주는 마스크 재고 앱
 
-### 2. 라이브러리 추가(Module 수준의 Gradle)
+### 2. 라이브러리 추가(Module 수준의 Gradle)와 AndroidManifest.xml에 Internet 권한 허가
 * Retrofit
 <pre>
   implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -32,6 +32,10 @@
         // 자바 8의 기능을 사용할 수 있습니다.
         coreLibraryDesugaringEnabled true
     }
+    
+* Internet 권한 허가
+<pre>
+   <uses-permission android:name="android.permission.INTERNET"/>
 </pre>
 
 
@@ -144,7 +148,7 @@ public interface MaskService {
 <pre>
   <b>1. MainViewModel 클래스를 생성합니다.  </b>
   
-  <b>2. MutableLiveData 객체 생성과 getter, setter 구현 </b>
+  <b>2. 변경이 가능한 LiveData 객체 생성, 즉 MutableLiveData 객체를 생성하고 getter, setter 구현 </b>
         <code> 
         private MutableLiveData<List<Store>> itemLiveData = new MutableLiveData<>();  // null 값으로 초기화
           public MutableLiveData<List<Store>> getItemLiveData() {
@@ -155,7 +159,62 @@ public interface MaskService {
         }
         </code>
          
-   <b>3. MainViewModel 객체 생성 : MainActivity </b>
+  <b>3. Retrofit 클래스를 이용해 MaskService 인터페이스의 구현을 생성합니다. </b>
+        <code> 
+        private Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(MaskService.BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create())
+            // 모시 형식으로 변형
+            .build();
+
+        private MaskService service = retrofit.create(MaskService.class);
+
+        private Call<StoreInfor> storeInforCall = service.fetchStoreInfo();
+        // 데이터를 받아올 준비를 함
+        </code>
+        
+        
+  <b>4. 실질적인 데이터를 받아오는 코드를 정의할 fetchStoreInfor를 정의 </b>
+        안드로이드에선 네트워크 처리를 할 때 비동기로 작업하도록 강제되어 있습니다. execute()는 동기 방식이며, 비동기 방식인 enqueue()를 사용합니다.
+        fetchStoreInfor()를 외부에서 호출하게되면 처리한 후 다시 호출한 곳으로 돌려줘야합니다. 그렇게 되면 Interface를 가지고 또 Callback 구현해야합니다.
+        LiveData를 사용하니 그런 작업 필요없이 Activity에서 데이터를 관찰하다 변경점을 캐치하여 데이터를 변경해주면 됩니다. 단 문제가 하나 발생하게 되는데
+        화면 전환 시 Call은 한 번만 사용할 수 있는데, 요청에 대한 Call 객체가 이미 있다며 앱이 꺼지는 문제가 발생합니다.
+        해당 문제는 [“IllegalStateException: Already executed”](https://stackoverflow.com/questions/35093884/retrofit-illegalstateexception-already-executed)을 통해 처리 가능합니다.
+        
+        <code>
+        public void fetchStoreInfor() {
+        // 안드로이드에선 네트워크 처리를 할 때 비동기로 작업하도록 강제가 되어있음
+        storeInforCall.clone().enqueue(new Callback<StoreInfor>() {
+            // 각각의 요청에 대해 사용 중인 Call 객체가 있는지 확인한다. 즉 객체를 복사해서 사용하는 것
+            // Retrofit을 만든 Jake Wharton이 직접 이렇게 해야한다고 stackoverflow에 댓글로 달았음음            @Override
+            public void onResponse(Call<StoreInfor> call, Response<StoreInfor> response) {
+                // 요청 성공
+                Log.d(TAG, "REFRESH");
+                List<Store> items = response.body().getStores().stream()
+                        .filter(item -> item.getRemainStat() != null)
+                        .collect(Collectors.toList());
+
+                itemLiveData.postValue(items);
+                // 비동기(background)에 대한 코드를 사용 시 setValue()가 아닌 postValue() 사용
+            }
+
+            @Override
+            public void onFailure(Call<StoreInfor> call, Throwable t) {
+                // 요청 실패
+                Log.e(TAG, "onFailure : "+t);
+                itemLiveData.postValue(Collections.emptyList());
+                // 빈 값의 데이터를  : 강제 종료를 막기위해
+
+            }
+        });
+        // enqueue는 비동기로 동작
+        } 
+
+        </code>
+       
+        
+         
+   <b>5. MainViewModel 객체 생성 : MainActivity </b>
    <code> 
          private MainViewModel viewModel;
             ...
@@ -164,17 +223,29 @@ public interface MaskService {
          }
    </code>
         
-   <b>4. LiveData 읽어오기위한 Observe </b>
-   
+   <b>6. LiveData 읽어오기위한 Observe </b>
    
    <code>
-             // UI 변경을 감지하여 업데이트
+        // UI 변경을 감지하여 업데이트
         viewModel.getItemLiveData().observe(this, stores -> {
             adapter.UpdateItems(stores);
             getSupportActionBar().setTitle("마스크 보유 약국 : " + stores.size() + "곳");
             // 상단의 액션바를 얻고. 타이틀을 설정
         });
+  
+        viewModel.fetchStoreInfor();
    </code>
+   
+   <b>7. 리팩토링 (6에서 정의한 MainActivity Lifecycle 로 인해 화면전환 시 viewModel.fetchStoreInfor();가 실행되면서 새로 요청하고 데이터를 다시 쓰는 문제점) </b>
+         화면전환 시 MainActivity Lifecycle이 새로 돌면서 viewModel.fetchStoreInfor(); 코드로 인해 MainViewModel의 fetchStoreInfor()를 다시 호출하고 데이터를 화면에 띄우게 됩니다. MainViewModel에서 생성자를 통해 fetchStoreInfor()를 실행되도록 변경하여 화면 전환 시 발생하는 위의 문제를 해결할 수 있습니다.
+         
+         ViewModel 객체는 생성자를 통해 SavedStateHandle 객체를 받는데, SavedStateHandle는 저장된 상태에 객체를 작성, 검색 등을 할 수 있게 하는 Key-Value Map 이며, 시스템에 의해 종료된 후에도 유지되기 때문에 데이터를 새로 쓰지않고 저장된 데이터를 불러오게 됩니다.
+         
+         <code>
+         public MainViewModel() {
+           fetchStoreInfor();
+         }
+         </code>
 </pre>
 
 

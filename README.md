@@ -81,6 +81,7 @@ public interface MaskService {
 </pre>
 
 ### 6. ViewModel, RecyclerView를 사용하기 전 응답이 제대로 도착하는지 Test
+
 <pre>
   <b>1. com 패키지를 사용하여 Test </b>
         com 패키지는 2가지 있는데, 일반적인 로직을 Test 할 수 있는 com (test) 패키지에서 Test를 합니다.
@@ -112,6 +113,7 @@ public interface MaskService {
 </pre>
 
 ### 7. RecyclerView
+
 <pre>
   <b>1. RecyclerView에서 사용할 Item Layout을 생성합니다. </b>
   <b>2. RecyclerView를 띄우려는 xml에 RecyclerView를 추가합니다. </b>
@@ -145,6 +147,7 @@ public interface MaskService {
 </pre>
 
 ### 8. ViewModel
+
 <pre>
   <b>1. MainViewModel 클래스를 생성합니다.  </b>
   

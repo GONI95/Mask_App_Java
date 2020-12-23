@@ -87,11 +87,16 @@ public interface MaskService {
 
 ### 6. ViewModel, RecyclerView를 사용하기 전 응답이 제대로 도착하는지 Test
 
-<pre>
   ><b>1. com 패키지를 사용하여 Test </b>
+  
+  <pre>
         com 패키지는 2가지 있는데, 일반적인 로직을 Test 할 수 있는 com (test) 패키지에서 Test를 합니다.
         com (androidTest) 패키지에선 안드로이드에서만 구현되는, 즉 안드로이드에 의존성을 지닌 UI 등을 Test하는 패키지 입니다.
-  <b>2. Test Code </b>
+  </pre>
+  
+  ><b>2. Test Code </b>
+  
+  <pre>
   
   ______________________________________________________________________________________________________________________
   <code>
@@ -153,9 +158,9 @@ public interface MaskService {
 
 ### 8. ViewModel
 
-  <b>1. MainViewModel 클래스를 생성합니다.  </b>
+  ><b>1. MainViewModel 클래스를 생성합니다.  </b>
   
-  <b>2. 변경이 가능한 LiveData 객체 생성, 즉 MutableLiveData 객체를 생성하고 getter, setter 구현 </b>
+  ><b>2. 변경이 가능한 LiveData 객체 생성, 즉 MutableLiveData 객체를 생성하고 getter, setter 구현 </b>
   
   <pre>
         <code> 
@@ -169,7 +174,7 @@ public interface MaskService {
         </code>
   </pre>   
   
-  <b>3. Retrofit 클래스를 이용해 MaskService 인터페이스의 구현을 생성합니다. </b>
+  ><b>3. Retrofit 클래스를 이용해 MaskService 인터페이스의 구현을 생성합니다. </b>
   
   <pre>
   <code> 
@@ -186,7 +191,7 @@ public interface MaskService {
         </code>
   </pre>      
   
-  <b>4. 실질적인 데이터를 받아오는 코드를 정의할 fetchStoreInfor를 정의 </b>
+  ><b>4. 실질적인 데이터를 받아오는 코드를 정의할 fetchStoreInfor를 정의 </b>
         [Already executed](https://stackoverflow.com/questions/35093884/retrofit-illegalstateexception-already-executed/) 
   <pre>
         안드로이드에선 네트워크 처리를 할 때 비동기로 작업하도록 강제되어 있습니다. execute()는 동기 방식이며, 비동기 방식인 enqueue()를 사용합니다.
@@ -226,7 +231,7 @@ public interface MaskService {
         </code>   
    </pre>     
    
-   <b>5. MainViewModel 객체 생성 : MainActivity </b>
+   ><b>5. MainViewModel 객체 생성 : MainActivity </b>
    
    <pre>
    <code> 
@@ -238,7 +243,7 @@ public interface MaskService {
    </code>
    </pre>
         
-   <b>6. LiveData 읽어오기위한 Observe </b>
+   ><b>6. LiveData 읽어오기위한 Observe </b>
    
    <pre>
    <code>
@@ -253,7 +258,7 @@ public interface MaskService {
    </code>
    </pre>
    
-   <b>7. 리팩토링 (6에서 정의한 MainActivity Lifecycle 로 인해 화면전환 시 viewModel.fetchStoreInfor();가 실행되면서 새로 요청하고 데이터를 다시 쓰는 문제점) </b>
+   ><b>7. 리팩토링 (6에서 정의한 MainActivity Lifecycle 로 인해 화면전환 시 viewModel.fetchStoreInfor();가 실행되면서 새로 요청하고 데이터를 다시 쓰는 문제점) </b>
    
    <pre>
          화면전환 시 MainActivity Lifecycle이 새로 돌면서 viewModel.fetchStoreInfor(); 코드로 인해 fetchStoreInfor()를 다시 호출하고 데이터를 화면에 띄우게 됩니다. 

@@ -124,18 +124,22 @@ public interface MaskService {
 
 ### 7. RecyclerView
 
-<pre>
+
   <b>1. RecyclerView에서 사용할 Item Layout을 생성합니다. </b>
   <b>2. RecyclerView를 띄우려는 xml에 RecyclerView를 추가합니다. </b>
   <b>3. RecyclerView Adapter 클래스를 생성하고 ViewHolder 클래스를 생성하여 코드를 작성합니다.(대부분 전형적인 코드로 기준이 잡혀있습니다.)</b>
   <b>4. RecyclerView를 Adapter와 연결시켜 줍니다.  </b>
-  
+  <pre>
   ______________________________________________________________________________________________________________________
   <code>
         final StoreAdapter adapter = new StoreAdapter(this);
             recyclerView.setAdapter(adapter);
   </code>
+  </pre>
+  
   <b>5. Adapter 클래스로 ArrayList 정보를 전달합니다 : MainViewModel </b>
+  
+  <pre>
         전형적인 코드와 다른 부분이라면 ArrayList의 값이 변경되는 경우 Adapter 객체를 통해 ArrayList 전달하는 것이 비효율적이기 때문에 
         UpdateItems() 메서드로 ArrayList 만 넘겨서 동적으로 데이터를 변경합니다.
         
@@ -146,8 +150,11 @@ public interface MaskService {
           notifyDataSetChanged(); //UI 갱신
         }
         </code>
+  </pre>
         
    <b>6. 출력을 확인하기위해 ArrayList 전달 : MainAcitivty </b>
+   
+   <pre>
    
    ______________________________________________________________________________________________________________________
          <code>
@@ -162,7 +169,7 @@ public interface MaskService {
          
          adapter.UpdataItems(items);
          </code>
-</pre>
+  </pre>
 
 ### 8. ViewModel
 

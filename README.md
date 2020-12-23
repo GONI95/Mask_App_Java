@@ -32,7 +32,8 @@
         // 자바 8의 기능을 사용할 수 있습니다.
         coreLibraryDesugaringEnabled true
     }
-    
+</pre>
+
 * Internet 권한 허가
 <pre>
    <uses-permission android:name="android.permission.INTERNET"/>

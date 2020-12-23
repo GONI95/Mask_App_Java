@@ -183,7 +183,7 @@ public interface MaskService {
         fetchStoreInfor()를 외부에서 호출하게되면 처리한 후 다시 호출한 곳으로 돌려줘야합니다. 그렇게 되면 Interface를 가지고 또 Callback 구현해야합니다.
         LiveData를 사용하니 그런 작업 필요없이 Activity에서 데이터를 관찰하다 변경점을 캐치하여 데이터를 변경해주면 됩니다. 단 문제가 하나 발생하게 되는데
         화면 전환 시 Call은 한 번만 사용할 수 있는데, 요청에 대한 Call 객체가 이미 있다며 앱이 꺼지는 문제가 발생합니다.
-        해당 문제는 [IllegalStateException: Already executed](https://stackoverflow.com/questions/35093884/retrofit-illegalstateexception-already-executed)을 통해 처리 가능합니다.
+        해당 문제는 </pre> [IllegalStateException: Already executed](https://stackoverflow.com/questions/35093884/retrofit-illegalstateexception-already-executed) <pre> 을 통해 처리 가능합니다.
         
         <code>
         public void fetchStoreInfor() {

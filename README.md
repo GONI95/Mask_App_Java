@@ -129,6 +129,8 @@ public interface MaskService {
   <b>2. RecyclerView를 띄우려는 xml에 RecyclerView를 추가합니다. </b>
   <b>3. RecyclerView Adapter 클래스를 생성하고 ViewHolder 클래스를 생성하여 코드를 작성합니다.(대부분 전형적인 코드로 기준이 잡혀있습니다.)</b>
   <b>4. RecyclerView를 Adapter와 연결시켜 줍니다.  </b>
+  
+  ______________________________________________________________________________________________________________________
   <code>
         final StoreAdapter adapter = new StoreAdapter(this);
             recyclerView.setAdapter(adapter);
@@ -137,13 +139,17 @@ public interface MaskService {
         전형적인 코드와 다른 부분이라면 ArrayList의 값이 변경되는 경우 Adapter 객체를 통해 ArrayList 전달하는 것이 비효율적이기 때문에 
         UpdateItems() 메서드로 ArrayList 만 넘겨서 동적으로 데이터를 변경합니다.
         
+  ______________________________________________________________________________________________________________________
         <code>
         public void UpdateItems(List<Store> items){
           mItems = items;
           notifyDataSetChanged(); //UI 갱신
         }
         </code>
+        
    <b>6. 출력을 확인하기위해 ArrayList 전달 : MainAcitivty </b>
+   
+   ______________________________________________________________________________________________________________________
          <code>
          List<Store> items = new ArrayList<>();
          Store store = new Store();
@@ -165,6 +171,8 @@ public interface MaskService {
   ><b>2. 변경이 가능한 LiveData 객체 생성, 즉 MutableLiveData 객체를 생성하고 getter, setter 구현 </b>
   
   <pre>
+  
+  ______________________________________________________________________________________________________________________
         <code> 
         private MutableLiveData<List<Store>> itemLiveData = new MutableLiveData<>();  // null 값으로 초기화
           public MutableLiveData<List<Store>> getItemLiveData() {
@@ -179,6 +187,8 @@ public interface MaskService {
   ><b>3. Retrofit 클래스를 이용해 MaskService 인터페이스의 구현을 생성합니다. </b>
   
   <pre>
+  
+  ______________________________________________________________________________________________________________________
   <code> 
         private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(MaskService.BASE_URL)
@@ -202,6 +212,7 @@ public interface MaskService {
         화면 전환 시 Call은 한 번만 사용할 수 있는데, 요청에 대한 Call 객체가 이미 있다며 앱이 꺼지는 문제가 발생합니다.
         해당 문제는 위 링크를 통해 해결할 수 있습니다.    
         
+  ______________________________________________________________________________________________________________________
         <code>
         public void fetchStoreInfor() {
    
@@ -238,6 +249,8 @@ public interface MaskService {
    ><b>5. MainViewModel 객체 생성 : MainActivity </b>
    
    <pre>
+   
+   ______________________________________________________________________________________________________________________
    <code> 
          private MainViewModel viewModel;
             ...
@@ -250,6 +263,8 @@ public interface MaskService {
    ><b>6. LiveData 읽어오기위한 Observe </b>
    
    <pre>
+   
+   ______________________________________________________________________________________________________________________
    <code>
         // UI 변경을 감지하여 업데이트
         viewModel.getItemLiveData().observe(this, stores -> {
@@ -271,6 +286,7 @@ public interface MaskService {
          ViewModel 객체는 생성자를 통해 SavedStateHandle 객체를 받는데, SavedStateHandle는 저장된 상태에 객체를 작성, 검색 등을 할 수 있게 하는 Key-Value Map 이며,
          시스템에 의해 종료된 후에도 유지되기 때문에 데이터를 새로 쓰지않고 저장된 데이터를 불러오게 됩니다.
          
+   ______________________________________________________________________________________________________________________
          <code>
          public MainViewModel() {
            fetchStoreInfor();

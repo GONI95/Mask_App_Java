@@ -46,22 +46,25 @@
 
 ### 4. Json 형식의 데이터를 Java 객체(Model)로 변환해주는 사이트
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  [Jsonschema2pojo](http://www.jsonschema2pojo.org/)
+><b>1. 해당 사이트에 응답 시 필요로 하는 json 데이터 형식을 입력합니다.</b>
+><b>2. Target language : java</b>
+><b>3. Source type : JSON</b>
+><b>4. Annotation style : Moshi</b>
 <pre>
-  ><b>1. 해당 사이트에 응답 시 필요로 하는 json 데이터 형식을 입력합니다.</b>
-  ><b>2. Target language : java</b>
-  ><b>3. Source type : JSON</b>
-  ><b>4. Annotation style : Moshi</b>
-        Moshi를 사용하므로 Moshi 선택
+       Moshi를 사용하므로 Moshi 선택
+</pre>
   ><b>5. Use primitive types (Check)</b>
+<pre>
         체크하지 않으면 래퍼 클래스를 사용하게 됩니다.
         primitive type(기본 자료형)
         wrapper class(기본 자료형을 객체로 다루는 클래스)
-  ><b>6. Use double numbers (Check)</b>
+</pre>
+><b>6. Use double numbers (Check)</b>
+<pre>
         위도, 경도가 있으니 double이 체크되어야 합니다.
+</pre>
   ><b>7. Include getters and setters (Check)</b>
   ><b>8. Zip 버튼을 클릭해서 프로젝트 패키지로 복붙</b>
-</pre>
-
 
   
 ### 5. Retrofit은 HTTP API를 JAVA Interface로 전환이 가능합니다. Service를 작성

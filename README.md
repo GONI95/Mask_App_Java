@@ -248,7 +248,8 @@ public interface MaskService {
          화면전환 시 MainActivity Lifecycle이 새로 돌면서 viewModel.fetchStoreInfor(); 코드로 인해 fetchStoreInfor()를 다시 호출하고 데이터를 화면에 띄우게 됩니다. 
          MainViewModel에서 생성자를 통해 fetchStoreInfor()를 실행되도록 변경하여 화면 전환 시 발생하는 위의 문제를 해결할 수 있습니다.
          
-         ViewModel 객체는 생성자를 통해 SavedStateHandle 객체를 받는데, SavedStateHandle는 저장된 상태에 객체를 작성, 검색 등을 할 수 있게 하는 Key-Value Map 이며, 시스템에 의해 종료된 후에도 유지되기 때문에 데이터를 새로 쓰지않고 저장된 데이터를 불러오게 됩니다.
+         ViewModel 객체는 생성자를 통해 SavedStateHandle 객체를 받는데, SavedStateHandle는 저장된 상태에 객체를 작성, 검색 등을 할 수 있게 하는 Key-Value Map 이며,
+         시스템에 의해 종료된 후에도 유지되기 때문에 데이터를 새로 쓰지않고 저장된 데이터를 불러오게 됩니다.
          
          <code>
          public MainViewModel() {

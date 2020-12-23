@@ -117,7 +117,7 @@ public interface MaskService {
         final StoreAdapter adapter = new StoreAdapter(this);
             recyclerView.setAdapter(adapter);
   </code>
-  <b>5. Adapter 클래스로 ArrayList 정보를 전달합니다. </b>
+  <b>5. Adapter 클래스로 ArrayList 정보를 전달합니다 : MainViewModel </b>
         전형적인 코드와 다른 부분이라면 ArrayList의 값이 변경되는 경우 Adapter 객체를 통해 ArrayList 전달하는 것이 비효율적이기 때문에 UpdateItems() 메서드로 ArrayList 만 넘겨서 동적으로 데이터를 변경합니다.
         <code>
         public void UpdateItems(List<Store> items){
@@ -125,8 +125,8 @@ public interface MaskService {
           notifyDataSetChanged(); //UI 갱신
         }
         </code>
-   <b>6. 출력 확인하기 </b>
-        <code>
+   <b>6. 출력을 확인하기위해 ArrayList 전달 : MainAcitivty </b>
+         <code>
          List<Store> items = new ArrayList<>();
          Store store = new Store();
          store.setAddr("약국 주소");
@@ -135,10 +135,45 @@ public interface MaskService {
          items.add(store);
          items.add(store);
          items.add(store);
+         
+         adapter.UpdataItems(items);
          </code>
 </pre>
 
 ### 8. ViewModel
-
+  <b>1. MainViewModel 클래스를 생성합니다.  </b>
+  
+  <b>2. MutableLiveData 객체 생성과 getter, setter 구현 </b>
+  <code> 
+        private MutableLiveData<List<Store>> itemLiveData = new MutableLiveData<>();  // null 값으로 초기화
+          public MutableLiveData<List<Store>> getItemLiveData() {
+          return itemLiveData;
+        }
+        public void setItemLiveData(MutableLiveData<List<Store>> itemLiveData) {
+         this.itemLiveData = itemLiveData;
+        }
+  </code>
+         
+   <b>3. MainViewModel 객체 생성 : MainActivity </b>
+   <code> 
+         private MainViewModel viewModel;
+            ...
+         Oncreate(){
+           viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+         }
+   </code>
+        
+   <b>4. LiveData 읽어오기위한 Observe </b>
+   
+   
+   <code>
+             // UI 변경을 감지하여 업데이트
+        viewModel.getItemLiveData().observe(this, stores -> {
+            adapter.UpdateItems(stores);
+            getSupportActionBar().setTitle("마스크 보유 약국 : " + stores.size() + "곳");
+            // 상단의 액션바를 얻고. 타이틀을 설정
+        });
+   </code>
+</pre>
 
 

@@ -106,7 +106,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
         return mItems.size();
     }
 
-    // 아이템 뷰의 정보를 가지고 있는 클래스
+    // 아이템 뷰의 정보를 가지고 있는 ViewHolder 클래스
     static class StoreViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         TextView address;

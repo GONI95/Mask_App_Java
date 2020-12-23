@@ -2,6 +2,8 @@ package com.example.mask_app_java;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,13 +34,16 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private MainViewModel viewModel;
+    // viewModel 객체를 생성
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "OnCreate");
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(
                         this, RecyclerView.VERTICAL, false));
@@ -46,56 +51,21 @@ public class MainActivity extends AppCompatActivity {
         final StoreAdapter adapter = new StoreAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(MaskService.BASE_URL)
-                .addConverterFactory(MoshiConverterFactory.create())
-                // 모시 형식으로 변형
-                .build();
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        MaskService service = retrofit.create(MaskService.class);
+        // UI 변경을 감지하여 업데이트
+        viewModel.getItemLiveData().observe(this, stores -> {
+            adapter.UpdateItems(stores);
+            getSupportActionBar().setTitle("마스크 보유 약국 : " + stores.size() + "곳");
+            // 상단의 액션바를 얻고. 타이틀을 설정
+        });
 
-        Call<StoreInfor> storeInforCall = service.fetchStoreInfo();
-        // 데이터를 받아올 준비를 함
-
-            // 안드로이드에선 네트워크 처리를 할 때 비동기로 작업하도록 강제가 되어있음
-            storeInforCall.enqueue(new Callback<StoreInfor>() {
-                @Override
-                public void onResponse(Call<StoreInfor> call, Response<StoreInfor> response) {
-                    // 요청을 성공할 경우
-                    Log.d(TAG, "REFRESH");
-                    List<Store> items = response.body().getStores();
-
-                    /*
-                        List<Store> result = new ArrayList<>();
-                    for(int i = 0; i < items.size(); i++) {
-                        Store store = items.get(i);
-                        if (store.getRemainStat() != null){
-                            result.add(store);
-                        }
-                    }   // 아래의 코드와 같은 의미임
-                     */
-                    
-                    items = items.stream()
-                            .filter(item -> item.getRemainStat() != null)
-                            .collect(Collectors.toList());
-
-                    adapter.UpdateItems(items);
-                    //동기방식으로 값 가져옴(response를 반환받고 그 안에 body가 있음)
-                    //스트림 기능으로 item 중에 remainstar이 null과 값이 없는 것이 아닌 데이터를 필터링하여 다시 (리스트 형태로 만듬 : collect)
-                    getSupportActionBar().setTitle("마스크 보유 약국 : " + items.size() + "곳");
-                    // 상단의 액션바를 얻고. 타이틀을 설정
-                }
-
-                @Override
-                public void onFailure(Call<StoreInfor> call, Throwable t) {
-                    // 요청을 실패할 경우
-                    Log.e(TAG, "onFailure : "+t);
-
-                }
-            });
-            // enqueue는 비동기로 동작
+        //viewModel.fetchStoreInfor();
+            // 실질적으로 데이터를 요청
+            // 라이브러리 특성상 화면 전환될 때 마다 새로 만들어지는 Activity로 인해 계속 요청을
+            // 하기에 ViewModel에서 생성자로 ViewModel 최초 생성 시 한 번의 요청으로 사용하도록 수정
+            // 화면을 전환해도 refresh Log가 출력되지 않는 것을 확인했음
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -107,8 +77,60 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_refresh:
+                viewModel.fetchStoreInfor();
+                // 리프래쉬 버튼으로 재요청을 시킴
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "OnDestroy");
+        super.onDestroy();
+    }
 }
+
+
+/**
+
+ // 안드로이드에선 네트워크 처리를 할 때 비동기로 작업하도록 강제가 되어있음
+ storeInforCall.enqueue(new Callback<StoreInfor>() {
+@Override
+public void onResponse(Call<StoreInfor> call, Response<StoreInfor> response) {
+// 요청을 성공할 경우
+Log.d(TAG, "REFRESH");
+List<Store> items = response.body().getStores();
+
+
+    //List<Store> result = new ArrayList<>();
+    //for(int i = 0; i < items.size(); i++) {
+        //Store store = items.get(i);
+
+        //if (store.getRemainStat() != null){
+            //result.add(store);
+        //}
+    //}   // 아래의 코드와 같은 의미임
+
+
+                    items = items.stream()
+                            .filter(item -> item.getRemainStat() != null)
+                            .collect(Collectors.toList());
+
+                            adapter.UpdateItems(items);
+                            //동기방식으로 값 가져옴(response를 반환받고 그 안에 body가 있음)
+                            //스트림 기능으로 item 중에 remainstar이 null과 값이 없는 것이 아닌 데이터를 필터링하여 다시 (리스트 형태로 만듬 : collect)
+                            getSupportActionBar().setTitle("마스크 보유 약국 : " + items.size() + "곳");
+                            // 상단의 액션바를 얻고. 타이틀을 설정
+                            }
+
+@Override
+public void onFailure(Call<StoreInfor> call, Throwable t) {
+        // 요청을 실패할 경우
+        Log.e(TAG, "onFailure : "+t);
+
+        }
+        });
+        // enqueue는 비동기로 동작
+
+ */

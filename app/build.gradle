@@ -53,4 +53,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    //위치정보(FusedLocationProviderClient가 포함되어있음)
+    implementation "com.google.android.gms:play-services-location:17.1.0"
+    //기존에 어려운 퍼미션을 수훨하게 작업해주는 라이브러리
+    implementation 'gun0912.ted:tedpermission:2.2.3'
 }

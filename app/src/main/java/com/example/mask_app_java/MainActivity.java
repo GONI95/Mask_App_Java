@@ -2,11 +2,16 @@ package com.example.mask_app_java;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.AtomicFile;
@@ -14,10 +19,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.mask_app_java.model.Store;
 import com.example.mask_app_java.model.StoreInfor;
 import com.example.mask_app_java.repository.MaskService;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,11 +48,48 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel viewModel;
     // viewModel 객체를 생성
 
+    private FusedLocationProviderClient fusedLocationClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "OnCreate");
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        // 초기화
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                perfromAction();
+                Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+                Toast.makeText(MainActivity.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        TedPermission.with(this)
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+                .check();
+    }
+
+    @SuppressLint("MissingPermission")
+    private void perfromAction() {
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            // Logic to handle location object
+                        }
+                    }
+                });
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(
@@ -61,11 +109,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //viewModel.fetchStoreInfor();
-            // 실질적으로 데이터를 요청
-            // 라이브러리 특성상 화면 전환될 때 마다 새로 만들어지는 Activity로 인해 계속 요청을
-            // 하기에 ViewModel에서 생성자로 ViewModel 최초 생성 시 한 번의 요청으로 사용하도록 수정
-            // 화면을 전환해도 refresh Log가 출력되지 않는 것을 확인했음
+        // 실질적으로 데이터를 요청
+        // 라이브러리 특성상 화면 전환될 때 마다 새로 만들어지는 Activity로 인해 계속 요청을
+        // 하기에 ViewModel에서 생성자로 ViewModel 최초 생성 시 한 번의 요청으로 사용하도록 수정
+        // 화면을 전환해도 refresh Log가 출력되지 않는 것을 확인했음
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();

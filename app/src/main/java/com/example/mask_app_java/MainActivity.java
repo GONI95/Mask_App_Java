@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         // 초기화
+
+        // TedPermission (Make PermissionListener)
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        // TedPermission (Start TedPermission)
         TedPermission.with(this)
                 .setPermissionListener(permissionlistener)
                 .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
@@ -80,13 +83,16 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("MissingPermission")
     private void perfromAction() {
+        
+        // 실질적인 위치정보를 받아오는 리스너와 메서드
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
-                            // Logic to handle location object
+                            Log.d(TAG, "getLatitude : "+location.getLatitude());
+                            Log.d(TAG, "getLongitude : "+location.getLongitude());
                         }
                     }
                 });

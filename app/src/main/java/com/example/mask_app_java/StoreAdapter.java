@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mask_app_java.model.Store;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,13 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
 
         holder.name.setText(store.getName());
         holder.address.setText(store.getAddr());
+        holder.distance.setText(Math.round(store.getDistance_unit()*100)/100.0 + "km");
+        /*
+         String.format("%.2f", store.getDistance_unit()) + "km"
+         둘 다 반올림을 하지만 Math.round()는 소수점 마지막 숫자가 0이면 절삭한다.
+         */
+        
+        // distance_unit은 double이기 때문에 ""+를 추가해줘야함
 
         String remainStat = "마스크 재고 수준";
         String mask_count = "마스크 재고 수량";
@@ -112,6 +121,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
         TextView address;
         TextView remain;
         TextView count;
+        TextView distance;
 
         public StoreViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -120,6 +130,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
             address = itemView.findViewById(R.id.addr_textView);
             remain = itemView.findViewById(R.id.remain_textView);
             count = itemView.findViewById(R.id.count_textView);
+            distance = itemView.findViewById(R.id.distance_textView);
         }
     }
 }

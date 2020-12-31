@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "OnCreate");
 
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         // 초기화
 
@@ -93,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
                         if (location != null) {
                             Log.d(TAG, "getLatitude : "+location.getLatitude());
                             Log.d(TAG, "getLongitude : "+location.getLongitude());
+                            
+                            viewModel.setLocation(location);
+                            Log.d(TAG, "fetchStoreInfor() 호출");
+                            viewModel.fetchStoreInfor();    //약국 정보 출력
                         }
                     }
                 });
@@ -105,10 +111,10 @@ public class MainActivity extends AppCompatActivity {
         final StoreAdapter adapter = new StoreAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-
         // UI 변경을 감지하여 업데이트
+        // viewModel에서 변경된 stores 정보를 받음
         viewModel.getItemLiveData().observe(this, stores -> {
+            Log.d(TAG, "LiveData 관찰 중");
             adapter.UpdateItems(stores);
             getSupportActionBar().setTitle("마스크 보유 약국 : " + stores.size() + "곳");
             // 상단의 액션바를 얻고. 타이틀을 설정

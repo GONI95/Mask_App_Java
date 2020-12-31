@@ -3,7 +3,10 @@ package com.example.mask_app_java.model;
 
 import com.squareup.moshi.Json;
 
-public class Store {
+//http://www.tcpschool.com/java/java_collectionFramework_comparable
+public class Store implements Comparable<Store>{
+    // Comparable 는 객체 간의 비교를 가능하게 해주는 인터페이스이다.
+    // Comparable 인터페이스는 객체를 정렬하는데 사용되는 메소드인 compareTo() 메소드를 정의하고 있다.
 
     @Json(name = "addr")
     private String addr;
@@ -23,6 +26,11 @@ public class Store {
     private String stockAt;
     @Json(name = "type")
     private String type;
+    private double distance_unit;
+
+    public double getDistance_unit() { return distance_unit; }
+
+    public void setDistance_unit(double distance_unit) { this.distance_unit = distance_unit; }
 
     public String getAddr() {
         return addr;
@@ -102,4 +110,9 @@ public class Store {
         this.type = type;
     }
 
+    @Override
+    public int compareTo(Store o) {
+        // o로 들어온 정보와 자신의 정보를 비교해 더 작으면 음수, 같으면 0, 크면 양수 반환
+        return Double.compare(distance_unit, o.distance_unit);
+    }
 }

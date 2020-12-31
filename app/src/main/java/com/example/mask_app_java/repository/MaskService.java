@@ -4,6 +4,7 @@ import com.example.mask_app_java.model.StoreInfor;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public interface MaskService {
     //String BASE_URL = "https://gist.githubusercontent.com/junsuk5/bb7485d5f70974deee920b8f0cd1e2f0/raw/063f64d9b343120c2cb01a6555cf9b38761b1d94/";
@@ -12,5 +13,21 @@ public interface MaskService {
 
     @GET("sample.json")
     // www -> sample.json 파일
-    Call<StoreInfor> fetchStoreInfo();
+    Call<StoreInfor> fetchStoreInfo(@Query("lat") double lat,
+                                    @Query("lng") double lng);  // 약국 위치정보 요청
+
+    /*
+     @GET("sample.json/?m=5000")
+    // www -> sample.json 파일
+    Call<StoreInfor> fetchStoreInfo(@Query("lat") double lat,
+                                    @Query("lng") double lng);  // 약국 위치정보 요청
+     */
 }
+
+/** 요청
+ @GET("sample.json")
+ suspend fun fetchStoreInfo(
+ @Query("lat") lat: Double,
+ @Query("lng") lng: Double
+ ): StoreInfo
+ */

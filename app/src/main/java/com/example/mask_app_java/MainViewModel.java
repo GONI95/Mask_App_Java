@@ -62,17 +62,22 @@ public class MainViewModel extends ViewModel {
 
     private MaskService service = retrofit.create(MaskService.class);
 
+    //private Call<StoreInfor> storeInforCall = service.fetchStoreInfo();
+
     public MainViewModel() {
         Log.d(TAG, "Create");
+        //fetchStoreInfor();
     }
 
     // 안드로이드에선 네트워크 처리를 할 때 비동기로 작업하도록 강제가 되어있음
     public void fetchStoreInfor() {
+        Log.d(TAG, "fetchStoreInfor");
         // 로딩을 시작하는 시작점
         progressLiveData.setValue(true);
         
         service     //위치정보 받아와 전달하며 호출하기위해 코드 변경!!!
-                .fetchStoreInfo(location.getLatitude(), location.getLongitude())
+                .fetchStoreInfo()   // location.getLatitude(), location.getLongitude()
+        //storeInforCall
                 .clone()
                 .enqueue(new Callback<StoreInfor>() {
                     // enqueue는 비동기로 동작
@@ -99,7 +104,7 @@ public class MainViewModel extends ViewModel {
                                     location.getAltitude(), location.getLongitude(),
                                     store.getLat(), store.getLng(), distance_unit
                             );
-                            Log.d(TAG, "store : " + store.toString());
+                            Log.d(TAG, "items : " + items.toString());
                             store.setDistance_unit(distance);
                         }
 

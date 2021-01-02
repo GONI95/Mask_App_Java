@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "OnCreate");
 
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        Log.d(TAG, "Create MainViewModel");
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         // 초기화
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.d(TAG, "getLongitude : "+location.getLongitude());
                             
                             viewModel.setLocation(location);
-                            Log.d(TAG, "fetchStoreInfor() 호출");
+                            Log.d(TAG, "viewModel에 위치정보 저장");
                             viewModel.fetchStoreInfor();    //약국 정보 출력
                         }
                     }

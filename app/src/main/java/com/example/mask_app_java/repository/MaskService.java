@@ -13,8 +13,7 @@ public interface MaskService {
 
     @GET("sample.json")
     // www -> sample.json 파일
-    Call<StoreInfor> fetchStoreInfo(@Query("lat") double lat,
-                                    @Query("lng") double lng);  // 약국 위치정보 요청
+    Call<StoreInfor> fetchStoreInfo();  // 약국 위치정보 요청
 
     /*
      @GET("sample.json/?m=5000")

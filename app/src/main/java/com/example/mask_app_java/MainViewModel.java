@@ -77,7 +77,6 @@ public class MainViewModel extends ViewModel {
         
         service     //위치정보 받아와 전달하며 호출하기위해 코드 변경!!!
                 .fetchStoreInfo()   // location.getLatitude(), location.getLongitude()
-        //storeInforCall
                 .clone()
                 .enqueue(new Callback<StoreInfor>() {
                     // enqueue는 비동기로 동작

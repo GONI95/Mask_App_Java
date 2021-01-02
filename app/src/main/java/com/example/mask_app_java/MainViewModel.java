@@ -2,6 +2,7 @@ package com.example.mask_app_java;
 
 import android.location.Location;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -45,9 +46,13 @@ public class MainViewModel extends ViewModel {
         return itemLiveData;
     }
 
-    public void setItemLiveData(MutableLiveData<List<Store>> itemLiveData) {
-        this.itemLiveData = itemLiveData;
-    }
+    public void setItemLiveData(MutableLiveData<List<Store>> itemLiveData) { this.itemLiveData = itemLiveData; }
+
+    private MutableLiveData<Boolean> progressLiveData = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> getProgressLiveData() { return progressLiveData; }
+
+    public void setProgressLiveData(MutableLiveData<Boolean> progressLiveData) { this.progressLiveData = progressLiveData; }
 
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(MaskService.BASE_URL)
@@ -63,6 +68,9 @@ public class MainViewModel extends ViewModel {
 
     // 안드로이드에선 네트워크 처리를 할 때 비동기로 작업하도록 강제가 되어있음
     public void fetchStoreInfor() {
+        // 로딩을 시작하는 시작점
+        progressLiveData.setValue(true);
+        
         service     //위치정보 받아와 전달하며 호출하기위해 코드 변경!!!
                 .fetchStoreInfo(location.getLatitude(), location.getLongitude())
                 .clone()
@@ -99,6 +107,10 @@ public class MainViewModel extends ViewModel {
                         // 두 지점간의 저리에 따라 정보를 정렬 하게된다.
                         itemLiveData.postValue(items);
                         // 비동기(background)에 대한 코드를 사용 시 setValue()가 아닌 postValue() 사용
+
+                        // 로딩을 끝을 내는 끝점
+                        progressLiveData.postValue(false);
+                        // 비동기(background)에 대한 코드를 사용 시 setValue()가 아닌 postValue() 사용
                     }
 
                     @Override
@@ -108,6 +120,8 @@ public class MainViewModel extends ViewModel {
                         itemLiveData.postValue(Collections.emptyList());
                         // 빈 값의 데이터를 셋팅 : 강제 종료를 막기위해
 
+                        progressLiveData.postValue(false);
+                        // 로딩을 끝을 내는 끝점
                     }
                 });
     }

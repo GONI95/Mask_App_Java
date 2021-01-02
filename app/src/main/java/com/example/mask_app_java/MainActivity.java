@@ -19,6 +19,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.mask_app_java.model.Store;
@@ -118,6 +120,15 @@ public class MainActivity extends AppCompatActivity {
             adapter.UpdateItems(stores);
             getSupportActionBar().setTitle("마스크 보유 약국 : " + stores.size() + "곳");
             // 상단의 액션바를 얻고. 타이틀을 설정
+        });
+
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+        viewModel.getProgressLiveData().observe(this, loading -> {
+            if (loading){
+                progressBar.setVisibility(View.VISIBLE);
+            }else if (!loading){
+                progressBar.setVisibility(View.GONE);
+            }
         });
 
         //viewModel.fetchStoreInfor();
